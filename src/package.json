@@ -1,6 +1,6 @@
 {
-  "name": "nativescript-admob",
-  "version": "2.0.0",
+  "name": "4dev-nativescript-admob",
+  "version": "0.0.1",
   "description": "Make money with your app by using Google's AdMob ads.",
   "main": "admob",
   "nativescript": {
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eddyverbruggen/nativescript-admob.git"
+    "url": "git+https://github.com/4devcoding/nativescript-admob.git"
   },
   "keywords": [
     "exosystem:nativescript",
@@ -34,12 +34,12 @@
     "Advertisement"
   ],
   "author": {
-    "name": "Eddy Verbruggen",
-    "email": "eddyverbruggen@gmail.com"
+    "name": "Ricardo Lopes",
+    "email": "rlopes@4dev.pr"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/eddyverbruggen/nativescript-admob/issues"
+    "url": "https://github.com/4devcoding/nativescript-admob/issues"
   },
-  "homepage": "https://github.com/eddyverbruggen/nativescript-admob"
+  "homepage": "https://github.com/4devcoding/nativescript-admob"
 }

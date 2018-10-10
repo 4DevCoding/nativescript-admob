@@ -1,4 +1,4 @@
-declare module "nativescript-admob" {
+declare module "4dev-nativescript-admob" {
     /**
      * The allowed values for AD_SIZE.
      */

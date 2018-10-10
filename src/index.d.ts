@@ -1,7 +1,7 @@
 /// <reference path="admob-common.d.ts"/>
-import { preloadInterstitial } from "nativescript-admob";
+import { preloadInterstitial } from "4dev-nativescript-admob";
 
-declare module "nativescript-admob" {
+declare module "4dev-nativescript-admob" {
 
     /**
      * The options object passed into the createBanner function.
