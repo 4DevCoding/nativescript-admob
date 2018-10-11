@@ -132,4 +132,9 @@ declare module "4dev-nativescript-admob" {
      * However, Google won't like it too much, because there will be a delay.
      */
     export function createInterstitial(options: CreateInterstitialOptions): Promise<any>;
+
+    /**
+     * To show a reward video add you can use this function.
+     */
+    export function showVideoAd(options: CreateInterstitialOptions): Promise<any>;
 }

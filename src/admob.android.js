@@ -111,12 +111,12 @@ admob.createBanner = function (arg) {
       admob.adView.loadAd(ad);
 
       var density = utils.layout.getDisplayDensity(),
-          top = settings.margins.top * density,
-          bottom = settings.margins.bottom * density;
+        top = settings.margins.top * density,
+        bottom = settings.margins.bottom * density;
 
       var relativeLayoutParams = new android.widget.RelativeLayout.LayoutParams(
-          android.widget.RelativeLayout.LayoutParams.MATCH_PARENT,
-          android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
+        android.widget.RelativeLayout.LayoutParams.MATCH_PARENT,
+        android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
 
       if (bottom > -1) {
         relativeLayoutParams.bottomMargin = bottom;
@@ -132,8 +132,8 @@ admob.createBanner = function (arg) {
       adViewLayout.addView(admob.adView, relativeLayoutParams);
 
       var relativeLayoutParamsOuter = new android.widget.RelativeLayout.LayoutParams(
-          android.widget.RelativeLayout.LayoutParams.MATCH_PARENT,
-          android.widget.RelativeLayout.LayoutParams.MATCH_PARENT);
+        android.widget.RelativeLayout.LayoutParams.MATCH_PARENT,
+        android.widget.RelativeLayout.LayoutParams.MATCH_PARENT);
 
       // Wrapping it in a timeout makes sure that when this function is loaded from a Page.loaded event 'frame.topmost()' doesn't resolve to 'undefined'.
       // Also, in NativeScript 4+ it may be undefined anyway.. so using the appModule in that case.
@@ -141,15 +141,15 @@ admob.createBanner = function (arg) {
         var topmost = frame.topmost();
         if (topmost !== undefined) {
           topmost.currentPage &&
-          topmost.currentPage.android &&
-          topmost.currentPage.android.getParent() &&
-          topmost.currentPage.android.getParent().addView(adViewLayout, relativeLayoutParamsOuter);
+            topmost.currentPage.android &&
+            topmost.currentPage.android.getParent() &&
+            topmost.currentPage.android.getParent().addView(adViewLayout, relativeLayoutParamsOuter);
         } else {
           application.android &&
-          application.android.foregroundActivity &&
-          application.android.foregroundActivity.getWindow() &&
-          application.android.foregroundActivity.getWindow().getDecorView() &&
-          application.android.foregroundActivity.getWindow().getDecorView().addView(adViewLayout, relativeLayoutParamsOuter);
+            application.android.foregroundActivity &&
+            application.android.foregroundActivity.getWindow() &&
+            application.android.foregroundActivity.getWindow().getDecorView() &&
+            application.android.foregroundActivity.getWindow().getDecorView().addView(adViewLayout, relativeLayoutParamsOuter);
         }
       }, 0);
 
@@ -216,10 +216,10 @@ admob.showInterstitial = function () {
 admob.createInterstitial = function (arg) {
   return new Promise(function (resolve, reject) {
     admob.preloadInterstitial(arg)
-        .then(function () {
-          admob.showInterstitial().then(resolve);
-        })
-        .catch(reject);
+      .then(function () {
+        admob.showInterstitial().then(resolve);
+      })
+      .catch(reject);
   });
 };
 
@@ -240,5 +240,33 @@ admob.hideBanner = function (arg) {
     }
   });
 };
+
+admob.showVideoAd = function (arg) {
+  var settings = admob.merge(arg, admob.defaults);
+  admob.videoView = new com.google.android.gms.ads.MobileAds(admob._getActivity());
+  admob.videoView.setAdUnitId(settings.androidInterstitialId);
+
+  var InterstitialAdListener = com.google.android.gms.ads.AdListener.extend({
+    onAdLoaded: function () {
+      console.log("onAdLoaded");
+      resolve();
+    },
+    onAdFailedToLoad: function (errorCode) {
+      console.log("onAdFailedToLoad: " + errorCode);
+      reject(errorCode);
+    },
+    onAdClosed: function () {
+      console.log("onAdClosed");
+      if (admob.interstitialView) {
+        admob.interstitialView.setAdListener(null);
+        admob.interstitialView = null;
+      }
+    }
+  });
+  admob.interstitialView.setAdListener(new InterstitialAdListener());
+
+
+
+}
 
 module.exports = admob;
