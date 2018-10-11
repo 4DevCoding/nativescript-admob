@@ -4,7 +4,7 @@
 [![Downloads][downloads-image]][npm-url]
 
 
-[npm-image]:http://img.shields.io/npm/v/nativescript-admob.svg
+[npm-image]:http://img.shields.io/npm/v/4dev-nativescript-admob.svg
 [npm-url]:https://npmjs.org/package/4dev-nativescript-admob
 [downloads-image]:http://img.shields.io/npm/dm/4dev-nativescript-admob.svg
 
