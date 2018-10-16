@@ -243,29 +243,17 @@ admob.hideBanner = function (arg) {
 
 admob.showVideoAd = function (arg) {
   var settings = admob.merge(arg, admob.defaults);
-  admob.videoView = new com.google.android.gms.ads.MobileAds(admob._getActivity());
-  admob.videoView.setAdUnitId(settings.androidInterstitialId);
 
-  var InterstitialAdListener = com.google.android.gms.ads.AdListener.extend({
-    onAdLoaded: function () {
-      console.log("onAdLoaded");
-      resolve();
-    },
-    onAdFailedToLoad: function (errorCode) {
-      console.log("onAdFailedToLoad: " + errorCode);
-      reject(errorCode);
-    },
-    onAdClosed: function () {
-      console.log("onAdClosed");
-      if (admob.interstitialView) {
-        admob.interstitialView.setAdListener(null);
-        admob.interstitialView = null;
-      }
-    }
-  });
-  admob.interstitialView.setAdListener(new InterstitialAdListener());
+  // admob.videoView = new com.google.android.gms.ads.MobileAds(admob._getActivity());
+  // var mRewardedVideoAd  = admob.videoView.getRewardedVideoAdInstance();
+  admob.videoView  = MobileAds.getRewardedVideoAdInstance(admob._getActivity());
+  admob.videoView.setRewardedVideoAdListener(admob._getActivity());
+  
+  // admob.interstitialView.setAdListener(new mRewardedVideoAdListener());
+  // admob.videoView.rewarded(new mRewardedVideoAdListener());
 
-
+  var ad = admob._buildAdRequest(settings);
+  admob.videoView.loadAd(ad);
 
 }
 
