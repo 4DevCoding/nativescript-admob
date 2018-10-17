@@ -210,6 +210,60 @@ admob.createInterstitial = function (arg) {
   });
 };
 
+
+admob.preloadVideoAd = function (arg) {
+  return new Promise(function (resolve, reject) {
+    try {
+      var settings = admob.merge(arg, admob.defaults);
+      admob.interstitialView = GADInterstitial.alloc().initWithAdUnitID(settings.iosInterstitialId);
+
+      // with interstitials you MUST wait for the ad to load before showing it, so requiring this delegate
+      var delegate = GADBannerViewDelegateImpl.new().initWithCallback(function (ad, error) {
+        if (error) {
+          reject(error);
+        } else {
+          // now we can safely show it, but leave that to the calling code
+          resolve();
+        }
+        delegate = undefined;
+      });
+      admob.interstitialView.delegate = delegate;
+
+      var adRequest = GADRequest.request();
+
+      if (settings.testing) {
+        var testDevices = [kGADSimulatorID];
+        if (settings.iosTestDeviceIds) {
+          testDevices = testDevices.concat(settings.iosTestDeviceIds);
+        }
+        adRequest.testDevices = testDevices;
+      }
+
+      admob.interstitialView.loadRequest(adRequest);
+    } catch (ex) {
+      console.log("Error in admob.preloadInterstitial: " + ex);
+      reject(ex);
+    }
+  });
+};
+admob.showVideoAd = function () {
+  return new Promise(function (resolve, reject) {
+    try {
+      if (admob.interstitialView) {
+        admob.interstitialView.presentFromRootViewController(utils.ios.getter(UIApplication, UIApplication.sharedApplication).keyWindow.rootViewController);
+        resolve();
+      } else {
+        reject("Please call 'preloadInterstitial' first.");
+      }
+    } catch (ex) {
+      reject(ex);
+    }
+  });
+};
+
+
+
+
 admob.hideBanner = function () {
   return new Promise(function (resolve, reject) {
     try {

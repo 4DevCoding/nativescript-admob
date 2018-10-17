@@ -1,5 +1,4 @@
 /// <reference path="admob-common.d.ts"/>
-import { preloadInterstitial } from "4dev-nativescript-admob";
 
 declare module "4dev-nativescript-admob" {
 
@@ -136,5 +135,6 @@ declare module "4dev-nativescript-admob" {
     /**
      * To show a reward video add you can use this function.
      */
-    export function showVideoAd(options: CreateInterstitialOptions): Promise<any>;
+    export function preloadVideoAd(options: CreateInterstitialOptions): Promise<any>;
+    export function showVideoAd(): Promise<any>;
 }

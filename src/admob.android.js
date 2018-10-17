@@ -184,6 +184,9 @@ admob.preloadInterstitial = function (arg) {
             admob.interstitialView.setAdListener(null);
             admob.interstitialView = null;
           }
+        },
+        onRewarded: function () {
+          console.log("reward received");
         }
       });
       admob.interstitialView.setAdListener(new InterstitialAdListener());
@@ -241,20 +244,72 @@ admob.hideBanner = function (arg) {
   });
 };
 
-admob.showVideoAd = function (arg) {
-  var settings = admob.merge(arg, admob.defaults);
+admob.preloadVideoAd = function (arg) {
+  return new Promise(function (resolve, reject) {
+    try {
+      var settings = admob.merge(arg, admob.defaults);
+      debugger;
+      admob.videoView = com.google.android.gms.ads.MobileAds.getRewardedVideoAdInstance(admob._getActivity());
 
-  // admob.videoView = new com.google.android.gms.ads.MobileAds(admob._getActivity());
-  // var mRewardedVideoAd  = admob.videoView.getRewardedVideoAdInstance();
-  admob.videoView  = MobileAds.getRewardedVideoAdInstance(admob._getActivity());
-  admob.videoView.setRewardedVideoAdListener(admob._getActivity());
-  
-  // admob.interstitialView.setAdListener(new mRewardedVideoAdListener());
-  // admob.videoView.rewarded(new mRewardedVideoAdListener());
 
-  var ad = admob._buildAdRequest(settings);
-  admob.videoView.loadAd(ad);
+      // Interstitial ads must be loaded before they can be shown, so adding a listener
+      var InterstitialAdListener = com.google.android.gms.ads.reward.RewardedVideoAdListener.extend({
+        onRewarded(reward) {
+          console.log("onRewarded! currency: " + reward.getType() + "  amount: " + reward.getAmount());
+          resolve(reward);
+        },
+        onRewardedVideoAdLeftApplication() {
+          console.log("onRewardedVideoAdLeftApplication");
+        },
+        onRewardedVideoAdClosed() {
+          console.log("onRewardedVideoAdClosed");
+          if (admob.videoView) {
+            admob.videoView.setAdListener(null);
+            admob.videoView = null;
+          }
+        },
+        onRewardedVideoAdFailedToLoad(errorCode) {
+          console.log("onRewardedVideoAdFailedToLoad");
+          reject(errorCode);
+        },
+        onRewardedVideoAdLoaded() {
+          console.log("onRewardedVideoAdLoaded");
+        },
+        onRewardedVideoAdOpened() {
+          console.log("onRewardedVideoAdOpened");
+        },
+        onRewardedVideoStarted() {
+          console.log("onRewardedVideoStarted");
+        },
+        onRewardedVideoCompleted() {
+          console.log("onRewardedVideoCompleted");
+        }
+      });
+      admob.videoView.setRewardedVideoAdListener(new InterstitialAdListener());
 
-}
+      var ad = admob._buildAdRequest(settings);
+      admob.videoView.loadAd(settings.androidInterstitialId, ad);
+    } catch (ex) {
+      console.log("Error in admob.preloadInterstitial: " + ex);
+      reject(ex);
+    }
+  });
+};
+
+admob.showVideoAd = function () {
+  return new Promise(function (resolve, reject) {
+    try {
+      if (admob.videoView) {
+        admob.videoView.show();
+        resolve();
+      } else {
+        reject("Please call 'preloadInterstitial' first.");
+      }
+    } catch (ex) {
+      console.log("Error in admob.showInterstitial: " + ex);
+      reject(ex);
+    }
+  });
+};
 
 module.exports = admob;
