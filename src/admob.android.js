@@ -248,7 +248,6 @@ admob.preloadVideoAd = function (arg, rewardCB) {
   return new Promise(function (resolve, reject) {
     try {
       var settings = admob.merge(arg, admob.defaults);
-      debugger;
       admob.videoView = com.google.android.gms.ads.MobileAds.getRewardedVideoAdInstance(admob._getActivity());
 
 
@@ -264,7 +263,7 @@ admob.preloadVideoAd = function (arg, rewardCB) {
         onRewardedVideoAdClosed() {
           console.log("onRewardedVideoAdClosed");
           if (admob.videoView) {
-            admob.videoView.setAdListener(null);
+            admob.videoView.setRewardedVideoAdListener(null);
             admob.videoView = null;
           }
         },
@@ -274,7 +273,7 @@ admob.preloadVideoAd = function (arg, rewardCB) {
         },
         onRewardedVideoAdLoaded() {
           console.log("onRewardedVideoAdLoaded");
-          resolve(reward);
+          resolve();
         },
         onRewardedVideoAdOpened() {
           console.log("onRewardedVideoAdOpened");
@@ -291,7 +290,7 @@ admob.preloadVideoAd = function (arg, rewardCB) {
       var ad = admob._buildAdRequest(settings);
       admob.videoView.loadAd(settings.androidInterstitialId, ad);
     } catch (ex) {
-      console.log("Error in admob.preloadInterstitial: " + ex);
+      console.log("Error in admob.preloadVideoAd: " + ex);
       reject(ex);
     }
   });
@@ -304,10 +303,10 @@ admob.showVideoAd = function () {
         admob.videoView.show();
         resolve();
       } else {
-        reject("Please call 'preloadInterstitial' first.");
+        reject("Please call 'preloadVideoAd' first.");
       }
     } catch (ex) {
-      console.log("Error in admob.showInterstitial: " + ex);
+      console.log("Error in admob.showVideoAd: " + ex);
       reject(ex);
     }
   });

@@ -147,6 +147,6 @@ declare module "4dev-nativescript-admob" {
     /**
      * To show a reward video add you can use this function.
      */
-    export function preloadVideoAd(options: CreateInterstitialOptions, rewardCB : () => AdReward): Promise<any>;
+    export function preloadVideoAd(options: CreateInterstitialOptions, rewardCB : (reward : AdReward) => void): Promise<any>;
     export function showVideoAd(): Promise<any>;
 }
