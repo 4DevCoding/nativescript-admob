@@ -18,6 +18,8 @@ tns plugin add 4dev-nativescript-admob
 ### iOS
 Run `pod repo update` from a Terminal, otherwise the required Pod version may not be available on your system.
 
+NOTE: Reward Video Ad is not implemented in ios.
+
 ## BANNER
 
 If you want a quickstart, [clone our demo app](https://github.com/4DevCoding/nativescript-admob-demo).
