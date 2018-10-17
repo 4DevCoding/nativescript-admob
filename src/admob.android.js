@@ -244,7 +244,7 @@ admob.hideBanner = function (arg) {
   });
 };
 
-admob.preloadVideoAd = function (arg) {
+admob.preloadVideoAd = function (arg, rewardCB) {
   return new Promise(function (resolve, reject) {
     try {
       var settings = admob.merge(arg, admob.defaults);
@@ -256,7 +256,7 @@ admob.preloadVideoAd = function (arg) {
       var InterstitialAdListener = com.google.android.gms.ads.reward.RewardedVideoAdListener.extend({
         onRewarded(reward) {
           console.log("onRewarded! currency: " + reward.getType() + "  amount: " + reward.getAmount());
-          resolve(reward);
+          rewardCB(reward);
         },
         onRewardedVideoAdLeftApplication() {
           console.log("onRewardedVideoAdLeftApplication");
@@ -274,6 +274,7 @@ admob.preloadVideoAd = function (arg) {
         },
         onRewardedVideoAdLoaded() {
           console.log("onRewardedVideoAdLoaded");
+          resolve(reward);
         },
         onRewardedVideoAdOpened() {
           console.log("onRewardedVideoAdOpened");

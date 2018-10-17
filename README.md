@@ -12,7 +12,7 @@
 ## Installation
 From the command prompt go to your app's root folder and execute:
 ```
-tns plugin add nativescript-admob
+tns plugin add 4dev-nativescript-admob
 ```
 
 ### iOS
@@ -20,7 +20,7 @@ Run `pod repo update` from a Terminal, otherwise the required Pod version may no
 
 ## BANNER
 
-If you want a quickstart, [clone our demo app](https://github.com/EddyVerbruggen/nativescript-admob-demo).
+If you want a quickstart, [clone our demo app](https://github.com/4DevCoding/nativescript-admob-demo).
 
 Here are the supported functions:
 
@@ -161,6 +161,75 @@ Note that when you want to use `showInterstitial` again, you also have to use `p
 
 ```js
 admob.showInterstitial().then(
+      function() {
+        // this will resolve almost immediately, and the interstitial is shown without a delay because it was already loaded
+        console.log("interstitial showing");
+      },
+      function(error) {
+        console.log("admob showInterstitial error: " + error);
+      }
+)
+```
+
+## INTERSTITIAL
+To show a fullscreen ad, you can use this function. Note that Interstitial banners need to be loaded before
+they can be shown, and there are two ways to do that:
+
+* Use `createInterstitial` and have the plugin automatically preload the ad and show it when loaded. This is not recommended because there's a delay the user may notice.
+* (Since plugin version 2.0.0) Use `preloadInterstitial`, and (at any time after its Promise resolves) `showInterstitial`. This will hide the preloading delay for your users. Note that the parameters of `createInterstitial` and `preloadInterstitial` are exactly the same so migration should be easy. 
+
+### createInterstitial
+Again, not recommended.
+
+```js
+admob.createInterstitial({
+    testing: true,
+    iosInterstitialId: "ca-app-pub-XXXXXX/YYYYY2", // add your own
+    androidInterstitialId: "ca-app-pub-AAAAAAAA/BBBBBB2", // add your own
+    // Android automatically adds the connected device as test device with testing:true, iOS does not
+    iosTestDeviceIds: ["ce97330130c9047ce0d4430d37d713b2"],
+    keywords: ["keyword1", "keyword2"] // add keywords for ad targeting
+  }).then(
+      function() {
+        console.log("admob createInterstitial done");
+      },
+      function(error) {
+        console.log("admob createInterstitial error: " + error);
+      }
+)
+```
+
+### preloadRewardedVideo
+Use this for instance while loading your view, so it's ready for the moment you want to actually show it (by calling `showVideoAd`).
+
+Note that the parameters are identical to `createInterstitial`. Dont forget to pass the callback function to receive de reward from ad.
+admob.preloadVideoAd(args, callback) ...
+
+```js
+admob.preloadVideoAd({
+    testing: true,
+    iosInterstitialId: "ca-app-pub-XXXXXX/YYYYY2", // add your own
+    androidInterstitialId: "ca-app-pub-AAAAAAAA/BBBBBB2", // add your own
+    // Android automatically adds the connected device as test device with testing:true, iOS does not
+    iosTestDeviceIds: ["ce97330130c9047ce0d4430d37d713b2"],
+    keywords: ["keyword1", "keyword2"] // add keywords for ad targeting
+  }, function(reward){ console.log(reward.amount); }).then(
+      function(reward) {
+        console.log("interstitial preloaded - you can now call 'showInterstitial' whenever you're ready to do so");
+      },
+      function(error) {
+        console.log("admob preloadInterstitial error: " + error);
+      }
+)
+```
+
+### showRewardedVideo
+At any moment after `preloadVideoAd` successfully resolves, you can call `showVideoAd`.
+
+Note that when you want to use `showVideoAd` again, you also have to use `preloadVideoAd` again because those ads can't be reused. 
+
+```js
+admob.showVideoAd().then(
       function() {
         // this will resolve almost immediately, and the interstitial is shown without a delay because it was already loaded
         console.log("interstitial showing");
