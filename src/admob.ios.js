@@ -211,7 +211,7 @@ admob.createInterstitial = function (arg) {
 };
 
 
-admob.preloadVideoAd = function (arg) {
+admob.preloadVideoAd = function (arg, rewardCB) {
   return new Promise(function (resolve, reject) {
     try {
       var settings = admob.merge(arg, admob.defaults);

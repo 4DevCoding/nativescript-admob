@@ -171,33 +171,11 @@ admob.showInterstitial().then(
 )
 ```
 
-## INTERSTITIAL
-To show a fullscreen ad, you can use this function. Note that Interstitial banners need to be loaded before
-they can be shown, and there are two ways to do that:
+## REWARDED VIDEO
+To show a fullscreen rewarded video ad, you can use this function. Note that rewarded video need to be loaded before
+they can be shown:
 
-* Use `createInterstitial` and have the plugin automatically preload the ad and show it when loaded. This is not recommended because there's a delay the user may notice.
-* (Since plugin version 2.0.0) Use `preloadInterstitial`, and (at any time after its Promise resolves) `showInterstitial`. This will hide the preloading delay for your users. Note that the parameters of `createInterstitial` and `preloadInterstitial` are exactly the same so migration should be easy. 
-
-### createInterstitial
-Again, not recommended.
-
-```js
-admob.createInterstitial({
-    testing: true,
-    iosInterstitialId: "ca-app-pub-XXXXXX/YYYYY2", // add your own
-    androidInterstitialId: "ca-app-pub-AAAAAAAA/BBBBBB2", // add your own
-    // Android automatically adds the connected device as test device with testing:true, iOS does not
-    iosTestDeviceIds: ["ce97330130c9047ce0d4430d37d713b2"],
-    keywords: ["keyword1", "keyword2"] // add keywords for ad targeting
-  }).then(
-      function() {
-        console.log("admob createInterstitial done");
-      },
-      function(error) {
-        console.log("admob createInterstitial error: " + error);
-      }
-)
-```
+Use `preloadVideoAd`, and (at any time after its Promise resolves) `showVideoAd`. This will hide the preloading delay for your users.
 
 ### preloadRewardedVideo
 Use this for instance while loading your view, so it's ready for the moment you want to actually show it (by calling `showVideoAd`).

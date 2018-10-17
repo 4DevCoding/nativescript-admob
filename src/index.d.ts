@@ -96,6 +96,18 @@ declare module "4dev-nativescript-admob" {
       keywords?: string[];
     }
 
+    export interface AdReward {
+      /**
+       * Type of the reward.
+       */
+      type: string;
+
+      /**
+       * Amount rewarded to the user.
+       */
+      amount: number;
+    }
+
     /**
      * Request a banner from the server and show it when it's ready.
      */
@@ -135,6 +147,6 @@ declare module "4dev-nativescript-admob" {
     /**
      * To show a reward video add you can use this function.
      */
-    export function preloadVideoAd(options: CreateInterstitialOptions): Promise<any>;
+    export function preloadVideoAd(options: CreateInterstitialOptions, rewardCB : () => AdReward): Promise<any>;
     export function showVideoAd(): Promise<any>;
 }
